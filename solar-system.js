@@ -1,9 +1,10 @@
 var pointLight, sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto, earthOrbit, ring, controls, scene, camera, renderer, scene;
 var planetSegments = 80;
 var sunData = constructPlanetData(1, 1, 0, "sun", "img/sun.png", 40, planetSegments);
-var mercuryData = constructPlanetData(88, )
-var earthData = constructPlanetData(365, 0.015, 149, "earth", "img/earth.jpeg", 1, planetSegments);
-var earthMoonData = constructPlanetData(7, 0.01, 1.5, "earthMoon", "img/earthMoon.jpg", 0.3, planetSegments);
+
+var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
+var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
+var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon.jpg", 0.8, planetSegments);
 
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 var clock = new THREE.Clock();
@@ -285,7 +286,8 @@ function init() {
     sun = loadTexturedPlanet(sunData, sunData.distanceFromAxis, 0, 0);
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
     earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
-    ring = getTube(0.1, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
+    mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
+    ring = getTube(1.5, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
 
     // Create the visible orbit that the Earth uses.
     createVisibleOrbits();
