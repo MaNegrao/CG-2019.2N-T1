@@ -1,23 +1,14 @@
-var pointLight, sun, moon, earth, earthOrbit, ring, controls, scene, camera, renderer, scene;
+var pointLight, sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto, earthOrbit, ring, controls, scene, camera, renderer, scene;
 var planetSegments = 80;
-var earthData = constructPlanetData(460, 0.015, 50, "earth", "img/earth.jpg", 1, planetSegments);
-var moonData = constructPlanetData(29.5, 0.01, 2, "moon", "img/moon.jpg", 0.3, planetSegments);
+var sunData = constructPlanetData(1, 1, 1, "sun", "img/sun.png", 40, planetSegments);
+var mercuryData = constructPlanetData(88, )
+var earthData = constructPlanetData(365, 0.015, 149, "earth", "img/earth.jpg", 1, planetSegments);
+var earthMoonData = constructPlanetData(7, 0.01, 1.5, "earthMoon", "img/earthMoon.jpg", 0.3, planetSegments);
+
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 var clock = new THREE.Clock();
 
-/**
- * This eliminates the redundance of having to type property names for a planet object.
- * @param {type} myOrbitRate decimal
- * @param {type} myRotationRate decimal
- * @param {type} myDistanceFromAxis decimal
- * @param {type} myName string
- * @param {type} myTexture image file path
- * @param {type} mySize decimal
- * @param {type} mySegments integer
- * @returns {constructPlanetData.mainAnonym$0}
- */
 
- 
 function constructPlanetData(myOrbitRate, myRotationRate, myDistanceFromAxis, myName, myTexture, mySize, mySegments) {
     return {
         orbitRate: myOrbitRate
@@ -202,18 +193,18 @@ function movePlanet(myPlanet, myData, myTime, stopRotation) {
 }
 
 /**
- * Move the moon around its orbit with the planet, and rotate it.
- * @param {type} myMoon
+ * Move the earthMoon around its orbit with the planet, and rotate it.
+ * @param {type} myearthMoon
  * @param {type} myPlanet
  * @param {type} myData
  * @param {type} myTime
  * @returns {undefined}
  */
-function moveMoon(myMoon, myPlanet, myData, myTime) {
-    movePlanet(myMoon, myData, myTime);
+function moveearthMoon(myearthMoon, myPlanet, myData, myTime) {
+    movePlanet(myearthMoon, myData, myTime);
     if (orbitData.runOrbit) {
-        myMoon.position.x = myMoon.position.x + myPlanet.position.x;
-        myMoon.position.z = myMoon.position.z + myPlanet.position.z;
+        myearthMoon.position.x = myearthMoon.position.x + myPlanet.position.x;
+        myearthMoon.position.z = myearthMoon.position.z + myPlanet.position.z;
     }
 }
 
@@ -233,7 +224,7 @@ function update(renderer, scene, camera, controls) {
 
     movePlanet(earth, earthData, time);
     movePlanet(ring, earthData, time, true);
-    moveMoon(moon, earth, moonData, time);
+    moveearthMoon(earthMoon, earth, earthMoonData, time);
 
     renderer.render(scene, camera);
     requestAnimationFrame(function () {
@@ -296,28 +287,10 @@ function init() {
     var ambientLight = new THREE.AmbientLight(0xaaaaaa);
     scene.add(ambientLight);
 
-    // Create the sun.
-    var sunMaterial = getMaterial("basic", "rgb(212, 97, 36)");
-    sun = getSphere(sunMaterial, 16, 48);
-    scene.add(sun);
-
-    // Create the glow of the sun.
-    var spriteMaterial = new THREE.SpriteMaterial(
-            {
-                map: new THREE.ImageUtils.loadTexture("img/glow.png")
-                , useScreenCoordinates: false
-                , color: 0xffffee
-                , transparent: false
-                , blending: THREE.AdditiveBlending
-            });
-    var sprite = new THREE.Sprite(spriteMaterial);
-    sprite.scale.set(70, 70, 1.0);
-    sun.add(sprite); // This centers the glow at the sun.
-
-    // Create the Earth, the Moon, and a ring around the earth.
+    sun = loadTexturedPlanet(sunData, sunData.distanceFromAxis, 0, 0);
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
-    moon = loadTexturedPlanet(moonData, moonData.distanceFromAxis, 0, 0);
-    ring = getTube(1.8, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
+    earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
+    ring = getTube(0.1, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
 
     // Create the visible orbit that the Earth uses.
     createVisibleOrbits();
