@@ -1,6 +1,8 @@
-var pointLight, sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto, earthOrbit, ring, controls, scene, camera, renderer, scene;
+var pointLight, ring, controls, scene, camera, renderer, scene;
+var sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto;
+var mercuryOrbit, venusOrbit, earthOrbit, marsOrbit, jupiterOrbit, saturnOrbit, uranusOrbit, neptuneOrbit, plutoOrbit;
 var planetSegments = 80;
-var sunData = constructPlanetData(1, 1, 0, "sun", "img/sun.png", 40, planetSegments);
+var sunData = constructPlanetData(1, 0.005, 0, "sun", "img/sun.png", 40, planetSegments);
 
 var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
 var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
@@ -98,13 +100,21 @@ function getMaterial(type, color, myTexture) {
  * @returns {undefined}
  */
 function createVisibleOrbits() {
-    var orbitWidth = 0.01;
+    var orbitWidth = 0.05;
     earthOrbit = getRing(earthData.distanceFromAxis + orbitWidth
         , earthData.distanceFromAxis - orbitWidth
-        , 320
+        , 365
         , 0xffffff
         , "earthOrbit"
         , 0);
+    
+    marsOrbit = getRing(marsData.distanceFromAxis + orbitWidth
+        , marsData.distanceFromAxis - orbitWidth
+        , 686
+        , 0xffffff
+        , "marsOrbit"
+        , 0);
+    
 }
 
 /**
@@ -201,7 +211,7 @@ function movePlanet(myPlanet, myData, myTime, stopRotation) {
  * @param {type} myTime
  * @returns {undefined}
  */
-function moveearthMoon(myMoon, myPlanet, myData, myTime) {
+function moveMoon(myMoon, myPlanet, myData, myTime) {
     movePlanet(myMoon, myData, myTime);
     if (orbitData.runOrbit) {
         myMoon.position.x = myMoon.position.x + myPlanet.position.x;
@@ -223,9 +233,10 @@ function update(renderer, scene, camera, controls) {
 
     var time = Date.now();
 
+    movePlanet(sun, sunData, time);
     movePlanet(earth, earthData, time);
-    movePlanet(ring, earthData, time, true);
-    moveearthMoon(earthMoon, earth, earthMoonData, time);
+    moveMoon(earthMoon, earth, earthMoonData, time);
+    movePlanet(mars, marsData, time);
 
     renderer.render(scene, camera);
     requestAnimationFrame(function () {
@@ -287,7 +298,6 @@ function init() {
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
     earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
     mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
-    ring = getTube(1.5, 0.05, 480, 0x757064, "ring", earthData.distanceFromAxis);
 
     // Create the visible orbit that the Earth uses.
     createVisibleOrbits();
