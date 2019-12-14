@@ -1,8 +1,8 @@
 var pointLight, sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto, earthOrbit, ring, controls, scene, camera, renderer, scene;
 var planetSegments = 80;
-var sunData = constructPlanetData(1, 1, 1, "sun", "img/sun.png", 40, planetSegments);
+var sunData = constructPlanetData(1, 1, 0, "sun", "img/sun.png", 40, planetSegments);
 var mercuryData = constructPlanetData(88, )
-var earthData = constructPlanetData(365, 0.015, 149, "earth", "img/earth.jpg", 1, planetSegments);
+var earthData = constructPlanetData(365, 0.015, 149, "earth", "img/earth.jpeg", 1, planetSegments);
 var earthMoonData = constructPlanetData(7, 0.01, 1.5, "earthMoon", "img/earthMoon.jpg", 0.3, planetSegments);
 
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
@@ -194,17 +194,17 @@ function movePlanet(myPlanet, myData, myTime, stopRotation) {
 
 /**
  * Move the earthMoon around its orbit with the planet, and rotate it.
- * @param {type} myearthMoon
+ * @param {type} myMoon
  * @param {type} myPlanet
  * @param {type} myData
  * @param {type} myTime
  * @returns {undefined}
  */
-function moveearthMoon(myearthMoon, myPlanet, myData, myTime) {
-    movePlanet(myearthMoon, myData, myTime);
+function moveearthMoon(myMoon, myPlanet, myData, myTime) {
+    movePlanet(myMoon, myData, myTime);
     if (orbitData.runOrbit) {
-        myearthMoon.position.x = myearthMoon.position.x + myPlanet.position.x;
-        myearthMoon.position.z = myearthMoon.position.z + myPlanet.position.z;
+        myMoon.position.x = myMoon.position.x + myPlanet.position.x;
+        myMoon.position.z = myMoon.position.z + myPlanet.position.z;
     }
 }
 
@@ -262,9 +262,6 @@ function init() {
     // Create controls that allows a user to move the scene with a mouse.
     controls = new THREE.OrbitControls(camera, renderer.domElement);
 
-    // Load the images used in the background.
-    var path = 'cubemap/';
-    var format = '.jpg';
     var urls = [
         'img/Starscape.png',
         'img/Starscape.png',
@@ -275,8 +272,6 @@ function init() {
     ];
     var reflectionCube = new THREE.CubeTextureLoader().load(urls);
     reflectionCube.format = THREE.RGBFormat;
-
-    // Attach the background cube to the scene.
     scene.background = reflectionCube;
 
     // Create light from the sun.
