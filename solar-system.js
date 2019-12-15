@@ -12,6 +12,8 @@ var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon
 var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
 var jupiterData = constructPlanetData(800, 0.02, 378, "jupiter", "img/jupiter.gif", 20, planetSegments);
 var saturnData = constructPlanetData(950, 0.02, 510, "saturn", "img/saturn.gif", 15, planetSegments);
+var uranusData = constructPlanetData(1100, 0.03, 600, "uranus", "img/uranus.jpg", 10, planetSegments);
+var neptuneData = constructPlanetData(1200, 0.03, 680, "neptune", "img/neptune.jpg", 9, planetSegments);
 
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 var clock = new THREE.Clock();
@@ -115,8 +117,22 @@ function createVisibleOrbits() {
         , 0xffffff
         , "saturnOrbit"
         , 0);
-    }
 
+    uranusOrbit = getRing(uranusData.distanceFromAxis + orbitWidth
+        , uranusData.distanceFromAxis - orbitWidth
+        , 1100
+        , 0xffffff
+        , "uranusOrbit"
+        , 0);
+
+    neptuneOrbit = getRing(neptuneData.distanceFromAxis + orbitWidth
+        , neptuneData.distanceFromAxis - orbitWidth
+        , 1200
+        , 0xffffff
+        , "neptuneOrbit"
+        , 0);
+
+}
 function getSphere(material, size, segments) {
     var geometry = new THREE.SphereGeometry(size, segments, segments);
     var obj = new THREE.Mesh(geometry, material);
@@ -196,6 +212,8 @@ function update(renderer, scene, camera, controls) {
     movePlanet(jupiter, jupiterData, time);
     movePlanet(saturn, saturnData, time);
     movePlanet(saturnRing, saturnData, time, true);
+    movePlanet(uranus, uranusData, time);
+    movePlanet(neptune, neptuneData, time);
 
     renderer.render(scene, camera);
     requestAnimationFrame(function () {
@@ -258,7 +276,9 @@ function init() {
     mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
     jupiter = loadTexturedPlanet(jupiterData, jupiterData.distanceFromAxis, 0, 0);
     saturn = loadTexturedPlanet(saturnData, saturnData.distanceFromAxis, 0, 0);
-    saturnRing = getTube(30, 2, 23, 0xf2e1b3, "saturnRing", saturnData.distanceFromAxis);
+    saturnRing = getTube(25, 3, 23, 0xf2e1b3, "saturnRing", saturnData.distanceFromAxis);
+    uranus = loadTexturedPlanet(uranusData, uranusData.distanceFromAxis, 0, 0);
+    neptune = loadTexturedPlanet(neptuneData, neptuneData.distanceFromAxis, 0, 0);
 
     createVisibleOrbits();
 
