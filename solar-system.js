@@ -6,6 +6,7 @@ var planetSegments = 80;
 
 var sunData = constructPlanetData(1, 0.005, 0, "sun", "img/sun.png", 40, planetSegments);
 var mercuryData = constructPlanetData(88, 0.01, 57.9, "mercury", "img/mercury.jpg", 2, planetSegments);
+var venusData = constructPlanetData(224, 0.01, 108, "venus", "img/venus.jpg", 4.5, planetSegments);
 var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
 var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
 var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon.jpg", 0.8, planetSegments);
@@ -71,10 +72,17 @@ function getMaterial(type, color, myTexture) {
 }
 
 function createVisibleOrbits() {
-    var orbitWidth = 0.05;
+    var orbitWidth = 0.2;
     mercuryOrbit = getRing(mercuryData.distanceFromAxis + orbitWidth
         , mercuryData.distanceFromAxis - orbitWidth
         , 88
+        , 0xffffff
+        , "marsOrbit"
+        , 0);
+        
+    venusOrbit = getRing(venusData.distanceFromAxis + orbitWidth
+        , venusData.distanceFromAxis - orbitWidth
+        , 227
         , 0xffffff
         , "marsOrbit"
         , 0);
@@ -166,6 +174,7 @@ function update(renderer, scene, camera, controls) {
 
     movePlanet(sun, sunData, time);
     movePlanet(mercury, mercuryData, time);
+    movePlanet(venus, venusData, time);
     movePlanet(earth, earthData, time);
     moveMoon(earthMoon, earth, earthMoonData, time);
     movePlanet(mars, marsData, time);
@@ -227,7 +236,8 @@ function init() {
     scene.add(ambientLight);
 
     sun = loadTexturedPlanet(sunData, sunData.distanceFromAxis, 0, 0);
-    mercury = loadTexturedPlanet(mercuryData, mercuryData.distanceFromAxis, 0, 0);    
+    mercury = loadTexturedPlanet(mercuryData, mercuryData.distanceFromAxis, 0, 0);
+    venus = loadTexturedPlanet(venusData, venusData.distanceFromAxis, 0, 0);    
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
     earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
     mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
