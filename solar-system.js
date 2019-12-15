@@ -4,14 +4,14 @@ var mercuryOrbit, venusOrbit, earthOrbit, marsOrbit, jupiterOrbit, saturnOrbit, 
 var planetSegments = 80;
 
 
-var sunData = constructPlanetData(1, 0.005, 0, "sun", "img/sun.png", 40, planetSegments);
-var mercuryData = constructPlanetData(88, 0.01, 57.9, "mercury", "img/mercury.jpg", 2, planetSegments);
+var sunData = constructPlanetData(1, 0.001, 0, "sun", "img/sun.png", 50, planetSegments);
+var mercuryData = constructPlanetData(88, 0.01, 62.9, "mercury", "img/mercury.jpg", 2, planetSegments);
 var venusData = constructPlanetData(224, 0.01, 108, "venus", "img/venus.jpg", 4.5, planetSegments);
 var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
-var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
 var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon.jpg", 0.8, planetSegments);
-
-
+var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
+var jupiterData = constructPlanetData(800, 0.02, 378, "jupiter", "img/jupiter.gif", 25, planetSegments);
+var saturnData = constructPlanetData(950, 0.02, 510, "saturn", "img/saturn.gif", 22, planetSegments);
 
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 var clock = new THREE.Clock();
@@ -100,6 +100,13 @@ function createVisibleOrbits() {
         , 0xffffff
         , "marsOrbit"
         , 0);
+
+    jupiterOrbit = getRing(jupiterData.distanceFromAxis + orbitWidth
+        , jupiterData.distanceFromAxis - orbitWidth
+        , 4000
+        , 0xffffff
+        , "jupiterOrbit"
+        , 0);
 }
 
 function getSphere(material, size, segments) {
@@ -178,6 +185,7 @@ function update(renderer, scene, camera, controls) {
     movePlanet(earth, earthData, time);
     moveMoon(earthMoon, earth, earthMoonData, time);
     movePlanet(mars, marsData, time);
+    movePlanet(jupiter, jupiterData, time);
 
     renderer.render(scene, camera);
     requestAnimationFrame(function () {
@@ -241,6 +249,7 @@ function init() {
     earth = loadTexturedPlanet(earthData, earthData.distanceFromAxis, 0, 0);
     earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
     mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
+    jupiter = loadTexturedPlanet(jupiterData, jupiterData.distanceFromAxis, 0, 0);
 
     // Create the visible orbit that the Earth uses.
     createVisibleOrbits();
