@@ -5,7 +5,7 @@ var planetSegments = 80;
 
 
 var sunData = constructPlanetData(1, 0.005, 0, "sun", "img/sun.png", 40, planetSegments);
-var mercuryData = constructPlanetData(88, 0.01, 57.9, "mercury", "img/mars.jpg", 2, planetSegments);
+var mercuryData = constructPlanetData(88, 0.01, 57.9, "mercury", "img/mercury.jpg", 2, planetSegments);
 var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
 var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
 var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon.jpg", 0.8, planetSegments);
@@ -49,36 +49,7 @@ function getRing(size, innerDiameter, facets, myColor, name, distanceFromAxis) {
     return myRing;
 }
 
-/**
- * Used to create a three dimensional ring. This takes more processing power to 
- * run that getRing(). So use this sparingly, such as for the outermost ring of
- * Saturn.
- * @param {type} size decimal
- * @param {type} innerDiameter decimal
- * @param {type} facets integer
- * @param {type} myColor HTML color
- * @param {type} name string
- * @param {type} distanceFromAxis decimal
- * @returns {THREE.Mesh|myRing}
- */
-function getTube(size, innerDiameter, facets, myColor, name, distanceFromAxis) {
-    var ringGeometry = new THREE.TorusGeometry(size, innerDiameter, facets, facets);
-    var ringMaterial = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
-    myRing = new THREE.Mesh(ringGeometry, ringMaterial);
-    myRing.name = name;
-    myRing.position.set(distanceFromAxis, 0, 0);
-    myRing.rotation.x = Math.PI / 2;
-    scene.add(myRing);
-    return myRing;
-}
 
-/**
- * Simplifies the creation of materials used for visible objects.
- * @param {type} type
- * @param {type} color
- * @param {type} myTexture
- * @returns {THREE.MeshStandardMaterial|THREE.MeshLambertMaterial|THREE.MeshPhongMaterial|THREE.MeshBasicMaterial}
- */
 function getMaterial(type, color, myTexture) {
     var materialOptions = {
         color: color === undefined ? 'rgb(255, 255, 255)' : color,
@@ -99,10 +70,6 @@ function getMaterial(type, color, myTexture) {
     }
 }
 
-/**
- *  Draws all of the orbits to be shown in the scene.
- * @returns {undefined}
- */
 function createVisibleOrbits() {
     var orbitWidth = 0.05;
     mercuryOrbit = getRing(mercuryData.distanceFromAxis + orbitWidth
@@ -127,13 +94,6 @@ function createVisibleOrbits() {
         , 0);
 }
 
-/**
- * Simplifies the creation of a sphere.
- * @param {type} material THREE.SOME_TYPE_OF_CONSTRUCTED_MATERIAL
- * @param {type} size decimal
- * @param {type} segments integer
- * @returns {getSphere.obj|THREE.Mesh}
- */
 function getSphere(material, size, segments) {
     var geometry = new THREE.SphereGeometry(size, segments, segments);
     var obj = new THREE.Mesh(geometry, material);
@@ -142,15 +102,6 @@ function getSphere(material, size, segments) {
     return obj;
 }
 
-/**
- * Creates a planet and adds it to the scene.
- * @param {type} myData data for a planet object
- * @param {type} x integer
- * @param {type} y integer
- * @param {type} z integer
- * @param {type} myMaterialType string that is passed to getMaterial()
- * @returns {getSphere.obj|THREE.Mesh|loadTexturedPlanet.myPlanet}
- */
 function loadTexturedPlanet(myData, x, y, z, myMaterialType) {
     var myMaterial;
     var passThisTexture;
@@ -175,12 +126,6 @@ function loadTexturedPlanet(myData, x, y, z, myMaterialType) {
     return myPlanet;
 }
 
-/**
- * Simplifies creating a light that disperses in all directions.
- * @param {type} intensity decimal
- * @param {type} color HTML color
- * @returns {THREE.PointLight|getPointLight.light}
- */
 function getPointLight(intensity, color) {
     var light = new THREE.PointLight(color, intensity);
     light.castShadow = true;
