@@ -286,6 +286,19 @@ function init() {
     var ambientLight = new THREE.AmbientLight(0xaaaaaa);
     scene.add(ambientLight);
 
+    var listener = new THREE.AudioListener();
+    scene.add( listener );
+
+    var sound = new THREE.Audio( listener );
+
+    var audioLoader = new THREE.AudioLoader();
+    audioLoader.load( 'sounds/ambient.mp3', function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.setLoop( true );
+        sound.setVolume( 0.5 );
+        sound.play();
+    });
+
     sun = loadTexturedPlanet(sunData, sunData.distanceFromAxis, 0, 0);
     mercury = loadTexturedPlanet(mercuryData, mercuryData.distanceFromAxis, 0, 0);
     venus = loadTexturedPlanet(venusData, venusData.distanceFromAxis, 0, 0);    
