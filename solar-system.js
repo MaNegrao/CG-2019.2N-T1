@@ -1,4 +1,4 @@
-var pointLight, ring, controls, scene, camera, renderer, scene;
+var pointLight, saturnRing, controls, scene, camera, renderer, scene;
 var sun, mercury, venus, earth, earthMoon, mars, jupiter, saturn, uranus, neptune, pluto;
 var mercuryOrbit, venusOrbit, earthOrbit, marsOrbit, jupiterOrbit, saturnOrbit, uranusOrbit, neptuneOrbit, plutoOrbit;
 var planetSegments = 80;
@@ -10,8 +10,8 @@ var venusData = constructPlanetData(224, 0.01, 108, "venus", "img/venus.jpg", 4.
 var earthData = constructPlanetData(365, 0.01, 149, "earth", "img/earth.jpg", 5, planetSegments);
 var earthMoonData = constructPlanetData(7, 0.007, 7, "earthMoon", "img/earthMoon.jpg", 0.8, planetSegments);
 var marsData = constructPlanetData(686, 0.02, 227, "mars", "img/mars.jpg", 2.5, planetSegments);
-var jupiterData = constructPlanetData(800, 0.02, 378, "jupiter", "img/jupiter.gif", 25, planetSegments);
-var saturnData = constructPlanetData(950, 0.02, 510, "saturn", "img/saturn.gif", 22, planetSegments);
+var jupiterData = constructPlanetData(800, 0.02, 378, "jupiter", "img/jupiter.gif", 20, planetSegments);
+var saturnData = constructPlanetData(950, 0.02, 510, "saturn", "img/saturn.gif", 15, planetSegments);
 
 var orbitData = {value: 200, runOrbit: true, runRotation: true};
 var clock = new THREE.Clock();
@@ -29,16 +29,17 @@ function constructPlanetData(myOrbitRate, myRotationRate, myDistanceFromAxis, my
     };
 }
 
-/**
- * create a visible ring and add it to the scene.
- * @param {type} size decimal
- * @param {type} innerDiameter decimal
- * @param {type} facets integer
- * @param {type} myColor HTML color
- * @param {type} name string
- * @param {type} distanceFromAxis decimal
- * @returns {THREE.Mesh|myRing}
- */
+function getTube(size, innerDiameter, facets, myColor, name, distanceFromAxis) {
+    var ringGeometry = new THREE.TorusGeometry(size, innerDiameter, facets, facets);
+    var ringMaterial = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
+    myRing = new THREE.Mesh(ringGeometry, ringMaterial);
+    myRing.name = name;
+    myRing.position.set(distanceFromAxis, 0, 0);
+    myRing.rotation.x = Math.PI / 2;
+    scene.add(myRing);
+    return myRing;
+}
+
 function getRing(size, innerDiameter, facets, myColor, name, distanceFromAxis) {
     var ring1Geometry = new THREE.RingGeometry(size, innerDiameter, facets);
     var ring1Material = new THREE.MeshBasicMaterial({color: myColor, side: THREE.DoubleSide});
@@ -103,11 +104,18 @@ function createVisibleOrbits() {
 
     jupiterOrbit = getRing(jupiterData.distanceFromAxis + orbitWidth
         , jupiterData.distanceFromAxis - orbitWidth
-        , 4000
+        , 800
         , 0xffffff
         , "jupiterOrbit"
         , 0);
-}
+
+    saturnOrbit = getRing(saturnData.distanceFromAxis + orbitWidth
+        , saturnData.distanceFromAxis - orbitWidth
+        , 950
+        , 0xffffff
+        , "saturnOrbit"
+        , 0);
+    }
 
 function getSphere(material, size, segments) {
     var geometry = new THREE.SphereGeometry(size, segments, segments);
@@ -186,6 +194,8 @@ function update(renderer, scene, camera, controls) {
     moveMoon(earthMoon, earth, earthMoonData, time);
     movePlanet(mars, marsData, time);
     movePlanet(jupiter, jupiterData, time);
+    movePlanet(saturn, saturnData, time);
+    movePlanet(saturnRing, saturnData, time, true);
 
     renderer.render(scene, camera);
     requestAnimationFrame(function () {
@@ -193,10 +203,7 @@ function update(renderer, scene, camera, controls) {
     });
 }
 
-/**
- * This is the function that starts everything.
- * @returns {THREE.Scene|scene}
- */
+
 function init() {
     // Create the camera that allows us to view into the scene.
     camera = new THREE.PerspectiveCamera(
@@ -250,8 +257,9 @@ function init() {
     earthMoon = loadTexturedPlanet(earthMoonData, earthMoonData.distanceFromAxis, 0, 0);
     mars = loadTexturedPlanet(marsData, marsData.distanceFromAxis, 0, 0);
     jupiter = loadTexturedPlanet(jupiterData, jupiterData.distanceFromAxis, 0, 0);
+    saturn = loadTexturedPlanet(saturnData, saturnData.distanceFromAxis, 0, 0);
+    saturnRing = getTube(30, 2, 23, 0xf2e1b3, "saturnRing", saturnData.distanceFromAxis);
 
-    // Create the visible orbit that the Earth uses.
     createVisibleOrbits();
 
     // Create the GUI that displays controls.
