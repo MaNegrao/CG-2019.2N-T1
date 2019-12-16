@@ -55,7 +55,6 @@ function getRing(size, innerDiameter, facets, myColor, name, distanceFromAxis) {
     return myRing;
 }
 
-
 function getMaterial(type, color, myTexture) {
     var materialOptions = {
         color: color === undefined ? 'rgb(255, 255, 255)' : color,
@@ -149,6 +148,7 @@ function createVisibleOrbits() {
         , 0);
 
 }
+
 function getSphere(material, size, segments) {
     var geometry = new THREE.SphereGeometry(size, segments, segments);
     var obj = new THREE.Mesh(geometry, material);
@@ -239,7 +239,6 @@ function update(renderer, scene, camera, controls) {
     });
 }
 
-
 function init() {
     // Create the camera that allows us to view into the scene.
     camera = new THREE.PerspectiveCamera(
@@ -287,7 +286,7 @@ function init() {
     scene.add(ambientLight);
 
     var listener = new THREE.AudioListener();
-    scene.add( listener );
+    camera.add( listener );
 
     var sound = new THREE.Audio( listener );
 
@@ -317,13 +316,13 @@ function init() {
 
     // Create the GUI that displays controls.
     var gui = new dat.GUI();
-    var folder1 = gui.addFolder('light');
-    folder1.add(pointLight, 'intensity', 0, 10);
-    var folder2 = gui.addFolder('speed');
-    folder2.add(orbitData, 'value', 0, 500);
-    folder2.add(orbitData, 'runOrbit', 0, 1);
-    folder2.add(orbitData, 'runRotation', 0, 1);
-
+    var lightFolder = gui.addFolder('Light');
+    lightFolder.add(pointLight, "intensity", 0, 10);
+    var rotationFolder = gui.addFolder('Speed');
+    rotationFolder.add(orbitData, 'value', 0, 500);
+    rotationFolder.add(orbitData, 'runOrbit', 0, 1);
+    rotationFolder.add(orbitData, 'runRotation', 0, 1);
+    var planetFolder = gui.addFolder('Planets');
     // Start the animation.
     update(renderer, scene, camera, controls);
 }
